@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Playway — Every website, one place. The internet curated and elevated.">
+<title>Playway — The Internet, Elevated</title>
+
+<!-- React + Babel -->
+<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+<!-- Framer Motion -->
+<script src="https://cdn.jsdelivr.net/npm/framer-motion@11.0.3/dist/framer-motion.js"></script>
+
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- Fonts: Geist (Vercel's font) + DM Sans -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,200;0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#fafafa;
+  --bg2:#f4f4f5;
+  --surface:rgba(255,255,255,0.75);
+  --surface2:rgba(255,255,255,0.55);
+  --border:rgba(0,0,0,0.07);
+  --border2:rgba(0,0,0,0.12);
+  --txt:#09090b;
+  --txt2:#52525b;
+  --txt3:#a1a1aa;
+  --blue:#2563eb;
+  --blue2:#3b82f6;
+  --indigo:#4f46e5;
+  --violet:#7c3aed;
+  --pink:#ec4899;
+  --green:#16a34a;
+  --amber:#d97706;
+  --red:#dc2626;
+  --ease:cubic-bezier(0.22,1,0.36,1);
+  --ease-back:cubic-bezier(0.34,1.56,0.64,1);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{
+  font-family:'DM Sans',system-ui,sans-serif;
+  background:var(--bg);color:var(--txt);
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+::selection{background:rgba(37,99,235,0.15);color:var(--blue)}
+a{text-decoration:none;color:inherit}
+
+/* ─ scrollbar ─ */
+::-webkit-scrollbar{width:7px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.12);border-radius:4px}
+
+/* ─ glass ─ */
+.glass{
+  background:rgba(255,255,255,0.72);
+  backdrop-filter:blur(28px) saturate(180%);
+  -webkit-backdrop-filter:blur(28px) saturate(180%);
+  border:1px solid rgba(255,255,255,0.9);
+}
+.glass-subtle{
+  background:rgba(255,255,255,0.55);
+  backdrop-filter:blur(16px) saturate(160%);
+  -webkit-backdrop-filter:blur(16px) saturate(160%);
+  border:1px solid rgba(255,255,255,0.75);
+}
+.glass-card{
+  background:rgba(255,255,255,0.82);
+  backdrop-filter:blur(40px) saturate(200%);
+  -webkit-backdrop-filter:blur(40px) saturate(200%);
+  border:1px solid rgba(255,255,255,0.95);
+  box-shadow:0 2px 12px rgba(0,0,0,0.06),0 1px 3px rgba(0,0,0,0.04);
+}
+
+/* ─ shadow system ─ */
+.shadow-xs{box-shadow:0 1px 3px rgba(0,0,0,0.05),0 1px 2px rgba(0,0,0,0.04)}
+.shadow-sm2{box-shadow:0 2px 8px rgba(0,0,0,0.07),0 1px 3px rgba(0,0,0,0.04)}
+.shadow-md2{box-shadow:0 4px 24px rgba(0,0,0,0.09),0 2px 6px rgba(0,0,0,0.05)}
+.shadow-lg2{box-shadow:0 12px 48px rgba(0,0,0,0.11),0 4px 12px rgba(0,0,0,0.06)}
+.shadow-xl2{box-shadow:0 24px 80px rgba(0,0,0,0.13),0 8px 24px rgba(0,0,0,0.07)}
+.shadow-glow-blue{box-shadow:0 0 0 1px rgba(37,99,235,0.15),0 8px 32px rgba(37,99,235,0.18)}
+
+/* ─ mesh gradient backgrounds ─ */
+.hero-mesh{
+  background:
+    radial-gradient(ellipse 80% 60% at 10% -5%,rgba(37,99,235,0.07) 0%,transparent 55%),
+    radial-gradient(ellipse 60% 50% at 90% 5%,rgba(124,58,237,0.06) 0%,transparent 55%),
+    radial-gradient(ellipse 50% 40% at 50% 95%,rgba(236,72,153,0.05) 0%,transparent 60%),
+    radial-gradient(ellipse 40% 35% at 75% 55%,rgba(79,70,229,0.04) 0%,transparent 60%),
+    linear-gradient(180deg,#ffffff 0%,#fafafa 100%);
+}
+.section-mesh-blue{background:radial-gradient(ellipse 60% 40% at 80% 20%,rgba(37,99,235,0.05) 0%,transparent 60%),#fafafa}
+.section-mesh-violet{background:radial-gradient(ellipse 60% 40% at 20% 80%,rgba(124,58,237,0.05) 0%,transparent 60%),#fafafa}
+.section-mesh-pink{background:radial-gradient(ellipse 60% 40% at 80% 80%,rgba(236,72,153,0.04) 0%,transparent 60%),#fafafa}
+.section-mesh-green{background:radial-gradient(ellipse 60% 40% at 20% 20%,rgba(22,163,74,0.05) 0%,transparent 60%),#fafafa}
+.section-alt{background:#f4f4f5}
+
+/* ─ gradient text ─ */
+.grad-blue-violet{
+  background:linear-gradient(135deg,#2563eb 0%,#4f46e5 45%,#7c3aed 80%,#ec4899 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;background-size:200% 200%;
+}
+.grad-slate{
+  background:linear-gradient(180deg,#09090b 0%,rgba(9,9,11,0.65) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+/* ─ noise grain ─ */
+.grain{
+  position:fixed;inset:0;z-index:9998;pointer-events:none;opacity:0.025;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ─ progress bar ─ */
+#pg{position:fixed;top:0;left:0;z-index:9999;height:2px;
+  background:linear-gradient(90deg,#2563eb,#4f46e5,#7c3aed,#ec4899);
+  transition:width 0.08s linear;box-shadow:0 0 8px rgba(37,99,235,0.6)}
+
+/* ─ nav ─ */
+.nav-pill-link{
+  font-size:13px;font-weight:400;color:var(--txt2);padding:5px 12px;
+  border-radius:7px;cursor:pointer;transition:all 0.2s var(--ease);
+  white-space:nowrap;
+}
+.nav-pill-link:hover{color:var(--txt);background:rgba(0,0,0,0.05)}
+
+/* ─ buttons ─ */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:11px 24px;border-radius:980px;border:none;outline:none;
+  font-family:'DM Sans',sans-serif;font-weight:500;font-size:14px;
+  letter-spacing:-0.01em;cursor:pointer;transition:all 0.28s var(--ease);
+  position:relative;overflow:hidden;white-space:nowrap;
+}
+.btn-primary{
+  background:linear-gradient(135deg,#2563eb,#4f46e5);
+  color:white;box-shadow:0 4px 20px rgba(37,99,235,0.32),0 1px 0 rgba(255,255,255,0.15) inset;
+}
+.btn-primary::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,0.15),transparent);border-radius:inherit}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 8px 32px rgba(37,99,235,0.42)}
+.btn-primary:active{transform:scale(0.97)}
+.btn-secondary{
+  background:rgba(0,0,0,0.06);color:var(--txt);
+  border:1px solid rgba(0,0,0,0.09);
+}
+.btn-secondary:hover{background:rgba(0,0,0,0.09);transform:translateY(-1px)}
+.btn-secondary:active{transform:scale(0.97)}
+.btn-ghost{background:transparent;color:var(--blue);font-weight:500}
+.btn-ghost:hover{background:rgba(37,99,235,0.07)}
+
+/* ─ input ─ */
+.input-field{
+  width:100%;padding:11px 16px;border-radius:12px;
+  background:rgba(255,255,255,0.9);border:1px solid rgba(0,0,0,0.11);
+  font-family:'DM Sans',sans-serif;font-size:14px;color:var(--txt);
+  outline:none;transition:all 0.25s var(--ease);
+  backdrop-filter:blur(8px);
+}
+.input-field:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,0.14);background:white}
+.input-field::placeholder{color:var(--txt3)}
+
+/* ─ tag ─ */
+.tag{
+  display:inline-block;font-size:10px;font-weight:600;
+  letter-spacing:0.05em;text-transform:uppercase;
+  padding:3px 10px;border-radius:980px;
+  background:rgba(0,0,0,0.05);color:var(--txt3);
+  border:1px solid rgba(0,0,0,0.07);
+}
+
+/* ─ section divider ─ */
+.divider{height:1px;background:linear-gradient(90deg,transparent,rgba(0,0,0,0.08) 20%,rgba(0,0,0,0.08) 80%,transparent)}
+
+/* ─ floating card ─ */
+.floating{animation:floatY 5s ease-in-out infinite}
+.floating2{animation:floatY 6.5s ease-in-out infinite 1.5s}
+.floating3{animation:floatY 4.5s ease-in-out infinite 0.8s}
+@keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+
+/* ─ live dot ─ */
+.live-dot{width:7px;height:7px;border-radius:50%;background:#22c55e;position:relative;flex-shrink:0}
+.live-dot::after{content:'';position:absolute;inset:-4px;border-radius:50%;background:rgba(34,197,94,0.3);animation:livePing 2s ease-out infinite}
+@keyframes livePing{0%{transform:scale(1);opacity:0.6}70%{transform:scale(1.8);opacity:0}100%{transform:scale(1.8);opacity:0}}
+
+/* ─ marquee ─ */
+.mq-track{display:flex;width:max-content;animation:mq 36s linear infinite}
+.mq-wrap:hover .mq-track{animation-play-state:paused}
+@keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ─ stat counter ─ */
+.stat-num{font-family:'DM Serif Display',serif;font-size:52px;letter-spacing:-0.04em;line-height:1}
+
+/* ─ icon box ─ */
+.icon-box{
+  width:48px;height:48px;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;flex-shrink:0;
+  background:rgba(255,255,255,0.95);
+  box-shadow:0 2px 8px rgba(0,0,0,0.08),0 1px 2px rgba(0,0,0,0.04);
+  transition:all 0.3s var(--ease-back);
+}
+
+/* ─ hero typography ─ */
+.hero-display{
+  font-family:'DM Serif Display',serif;
+  font-size:clamp(56px,10vw,118px);
+  letter-spacing:-0.03em;line-height:0.95;
+  color:var(--txt);
+}
+.hero-display em{font-style:italic;color:#4f46e5}
+
+/* ─ section title ─ */
+.sec-title{
+  font-family:'DM Serif Display',serif;
+  font-size:clamp(38px,5vw,58px);
+  letter-spacing:-0.03em;line-height:0.97;color:var(--txt);
+}
+
+/* ─ number label ─ */
+.sec-num{
+  font-family:'DM Serif Display',serif;
+  font-size:clamp(72px,10vw,130px);
+  letter-spacing:-0.06em;line-height:1;
+  color:rgba(0,0,0,0.04);position:absolute;right:0;top:-20px;
+  pointer-events:none;user-select:none;
+}
+
+/* ─ card hover magic ─ */
+.x-card{
+  transition:transform 0.35s var(--ease),box-shadow 0.35s var(--ease),border-color 0.25s;
+  cursor:pointer;
+}
+.x-card:hover{transform:translateY(-5px) scale(1.015)}
+
+/* ─ grid layouts ─ */
+.cards-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.cards-4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.cards-2{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+@media(max-width:1024px){.cards-4{grid-template-columns:repeat(2,1fr)}.cards-3{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.cards-4,.cards-3,.cards-2{grid-template-columns:1fr}}
+
+/* ─ sticky sidebar layout ─ */
+.sec-layout{display:grid;grid-template-columns:240px 1fr;gap:80px;align-items:start}
+.sec-sticky{position:sticky;top:88px}
+@media(max-width:900px){.sec-layout{grid-template-columns:1fr;gap:32px}.sec-sticky{position:static}.sec-num{display:none}}
+
+/* ─ featured card ─ */
+.feat-bg{
+  background:linear-gradient(135deg,rgba(37,99,235,0.08) 0%,rgba(79,70,229,0.08) 40%,rgba(124,58,237,0.06) 70%,rgba(236,72,153,0.05) 100%);
+  border:1px solid rgba(37,99,235,0.15);
+}
+.feat-bg:hover{border-color:rgba(37,99,235,0.28)}
+
+/* ─ footer ─ */
+.footer-bg{background:rgba(250,250,250,0.9);border-top:1px solid rgba(0,0,0,0.08)}
+
+/* ─ reveal ─ */
+.rv{opacity:0;transform:translateY(20px);transition:opacity 0.75s var(--ease),transform 0.75s var(--ease)}
+.rv.in{opacity:1;transform:none}
+.rv-l{opacity:0;transform:translateX(-16px);transition:opacity 0.75s var(--ease),transform 0.75s var(--ease)}
+.rv-l.in{opacity:1;transform:none}
+
+/* ─ responsive nav ─ */
+@media(max-width:768px){
+  .nav-desktop{display:none!important}
+  .hero-display{font-size:clamp(44px,12vw,80px)}
+  .footer-grid{grid-template-columns:1fr 1fr!important}
+  footer .footer-brand{grid-column:span 2}
+  .stats-grid{grid-template-columns:repeat(2,1fr)!important}
+}
+
+/* ─ custom cursor ─ */
+#cursor{
+  position:fixed;z-index:9997;pointer-events:none;
+  width:8px;height:8px;border-radius:50%;background:var(--blue);
+  transform:translate(-50%,-50%);
+  transition:transform 0.1s,width 0.3s,height 0.3s,opacity 0.3s;
+  mix-blend-mode:multiply;
+}
+#cursor-ring{
+  position:fixed;z-index:9996;pointer-events:none;
+  width:36px;height:36px;border-radius:50%;
+  border:1.5px solid rgba(37,99,235,0.4);
+  transform:translate(-50%,-50%);
+  transition:width 0.4s var(--ease),height 0.4s var(--ease),border-color 0.3s;
+}
+@media(hover:none){#cursor,#cursor-ring{display:none}}
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<div id="pg" style="width:0%"></div>
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+<div id="root"></div>
+
+<script>
+tailwind.config={
+  theme:{
+    extend:{
+      fontFamily:{display:['DM Serif Display','serif'],body:['DM Sans','system-ui','sans-serif']},
+    }
+  }
+}
+</script>
+
+<script type="text/babel">
+/* ─ destructure ─ */
+const {useState,useEffect,useRef,useCallback,useMemo}=React;
+const {motion,AnimatePresence,useScroll,useTransform,useSpring,useInView,stagger,animate:fm_animate}=window.Motion||window.FramerMotion||{
+  motion:{div:'div',a:'a',nav:'nav',section:'section',span:'span',h1:'h1',h2:'h2',p:'p',button:'button'},
+  AnimatePresence:({children})=>children,
+  useScroll:()=>({scrollY:{get:()=>0}}),
+  useTransform:(v,a,b)=>0,
+  useSpring:(v)=>v,
+  useInView:(ref)=>true,
+};
+
+/* ════════════════════════════
+   DATA
+════════════════════════════ */
+const CATS=[
+  {id:'search',num:'01',label:'Search',accent:'#2563eb',light:'rgba(37,99,235,0.08)',mesh:'section-mesh-blue',sites:[
+    {n:'Google',i:'🔍',d:'The world\'s most-used search engine with unmatched coverage.',t:'Universal',u:'https://google.com'},
+    {n:'Bing',i:'🌐',d:'Microsoft\'s AI-powered search with rich visuals and Copilot.',t:'AI-Powered',u:'https://bing.com'},
+    {n:'DuckDuckGo',i:'🦆',d:'Privacy-first search that never tracks you.',t:'Privacy',u:'https://duckduckgo.com'},
+    {n:'Perplexity',i:'✨',d:'AI answers with real-time citations and live web access.',t:'AI Search',u:'https://perplexity.ai'},
+    {n:'Ecosia',i:'🌳',d:'Search the web, plant trees with every query.',t:'Eco',u:'https://ecosia.org'},
+    {n:'Yandex',i:'🔎',d:'Russia\'s leading search engine with powerful tools.',t:'Global',u:'https://yandex.com'},
+  ]},
+  {id:'social',num:'02',label:'Social',accent:'#7c3aed',light:'rgba(124,58,237,0.08)',mesh:'section-mesh-violet',sites:[
+    {n:'Instagram',i:'📸',d:'Billions of creators. Photos, Reels, Stories and live video.',t:'Visual',u:'https://instagram.com'},
+    {n:'X / Twitter',i:'𝕏',d:'Real-time public conversations and breaking news.',t:'Microblog',u:'https://twitter.com'},
+    {n:'Facebook',i:'👥',d:'Groups, events, marketplace and personal connections.',t:'Network',u:'https://facebook.com'},
+    {n:'LinkedIn',i:'💼',d:'Professional networking, jobs and industry insights.',t:'Professional',u:'https://linkedin.com'},
+    {n:'Reddit',i:'🤖',d:'Deep communities for every niche topic imaginable.',t:'Forum',u:'https://reddit.com'},
+    {n:'Pinterest',i:'📌',d:'Visual discovery for ideas, style and inspiration.',t:'Discovery',u:'https://pinterest.com'},
+    {n:'Snapchat',i:'👻',d:'Ephemeral messaging with AR lenses and Stories.',t:'Messaging',u:'https://snapchat.com'},
+    {n:'Discord',i:'🎮',d:'Voice, video and text for gaming and communities.',t:'Community',u:'https://discord.com'},
+  ]},
+  {id:'news',num:'03',label:'News',accent:'#dc2626',light:'rgba(220,38,38,0.07)',mesh:'section-mesh-pink',sites:[
+    {n:'BBC News',i:'📺',d:'Trusted global news from the British Broadcasting Corporation.',t:'Global',u:'https://bbc.com/news'},
+    {n:'Reuters',i:'📰',d:'International wire service. Facts first, always.',t:'Wire',u:'https://reuters.com'},
+    {n:'New York Times',i:'📄',d:'Award-winning journalism covering politics and culture.',t:'Newspaper',u:'https://nytimes.com'},
+    {n:'Al Jazeera',i:'🌍',d:'Global news with underrepresented perspectives.',t:'International',u:'https://aljazeera.com'},
+    {n:'TechCrunch',i:'💻',d:'Technology, startups and Silicon Valley reporting.',t:'Tech',u:'https://techcrunch.com'},
+    {n:'The Guardian',i:'🛡️',d:'Progressive journalism on global affairs and culture.',t:'Newspaper',u:'https://theguardian.com'},
+  ]},
+  {id:'shopping',num:'04',label:'Shopping',accent:'#16a34a',light:'rgba(22,163,74,0.07)',mesh:'section-mesh-green',sites:[
+    {n:'Amazon',i:'📦',d:'Everything store. Fast delivery with Prime across every category.',t:'Marketplace',u:'https://amazon.com'},
+    {n:'eBay',i:'🏷️',d:'Auctions and fixed-price listings. New, used and rare.',t:'Auction',u:'https://ebay.com'},
+    {n:'Etsy',i:'🎨',d:'Handmade, vintage and artisan goods from creators worldwide.',t:'Artisan',u:'https://etsy.com'},
+    {n:'AliExpress',i:'🛒',d:'Direct from manufacturers. Affordable, global selection.',t:'Global',u:'https://aliexpress.com'},
+    {n:'Zalando',i:'👗',d:'Europe\'s biggest fashion platform, thousands of brands.',t:'Fashion',u:'https://zalando.com'},
+    {n:'Shopify',i:'🏪',d:'Launch your own store. Behind millions of businesses.',t:'Platform',u:'https://shopify.com'},
+  ]},
+  {id:'entertainment',num:'05',label:'Stream',accent:'#d97706',light:'rgba(217,119,6,0.08)',mesh:'section-mesh-blue',sites:[
+    {n:'Netflix',i:'🎬',d:'Original series, films and documentaries. The world\'s leading streamer.',t:'Streaming',u:'https://netflix.com'},
+    {n:'YouTube',i:'▶️',d:'Every video ever made. Music, tutorials and live streams.',t:'Video',u:'https://youtube.com'},
+    {n:'Spotify',i:'🎵',d:'100M+ songs, podcasts and audiobooks.',t:'Music',u:'https://spotify.com'},
+    {n:'Twitch',i:'📡',d:'Live streaming for gaming, music and creative content.',t:'Live',u:'https://twitch.tv'},
+    {n:'Disney+',i:'✨',d:'Disney, Marvel, Star Wars, Pixar and National Geographic.',t:'Streaming',u:'https://disneyplus.com'},
+    {n:'SoundCloud',i:'🎸',d:'Independent music. Discover emerging artists first.',t:'Indie',u:'https://soundcloud.com'},
+    {n:'IMDb',i:'🎞️',d:'The internet\'s movie database. Ratings and trivia.',t:'Database',u:'https://imdb.com'},
+    {n:'Prime Video',i:'📽️',d:'Amazon originals and blockbuster movies on demand.',t:'Streaming',u:'https://primevideo.com'},
+  ]},
+  {id:'learning',num:'06',label:'Learn',accent:'#d97706',light:'rgba(217,119,6,0.07)',mesh:'section-mesh-green',sites:[
+    {n:'Khan Academy',i:'📚',d:'Free education for everyone — math, science, history.',t:'Free',u:'https://khanacademy.org'},
+    {n:'Coursera',i:'🎓',d:'University courses and certificates from top institutions.',t:'University',u:'https://coursera.org'},
+    {n:'Udemy',i:'💡',d:'Practical skills from expert instructors.',t:'Skills',u:'https://udemy.com'},
+    {n:'Wikipedia',i:'📖',d:'60M+ articles in 300+ languages. Collaboratively maintained.',t:'Reference',u:'https://wikipedia.org'},
+    {n:'Duolingo',i:'🦉',d:'Learn 40+ languages through gamified daily lessons.',t:'Languages',u:'https://duolingo.com'},
+    {n:'TED',i:'🎤',d:'Ideas worth spreading from brilliant minds.',t:'Talks',u:'https://ted.com'},
+  ]},
+  {id:'tools',num:'07',label:'Tools',accent:'#4f46e5',light:'rgba(79,70,229,0.08)',mesh:'section-mesh-violet',sites:[
+    {n:'Notion',i:'📝',d:'All-in-one workspace for notes, wikis and teams.',t:'Workspace',u:'https://notion.so'},
+    {n:'Figma',i:'🎨',d:'The collaborative design tool for wireframes and prototypes.',t:'Design',u:'https://figma.com'},
+    {n:'GitHub',i:'⚙️',d:'Home of open source. Collaborate on code with millions.',t:'Dev',u:'https://github.com'},
+    {n:'Canva',i:'🖌️',d:'Design graphics, presentations and social media visuals.',t:'Design',u:'https://canva.com'},
+    {n:'Slack',i:'💬',d:'Team messaging, channels and integrations.',t:'Comms',u:'https://slack.com'},
+    {n:'Trello',i:'📋',d:'Kanban-style project management for any workflow.',t:'Projects',u:'https://trello.com'},
+    {n:'Google Drive',i:'☁️',d:'Store, sync and collaborate on docs in the cloud.',t:'Cloud',u:'https://google.com/drive'},
+    {n:'Zoom',i:'📹',d:'Video meetings and webinars anywhere in the world.',t:'Video',u:'https://zoom.us'},
+  ]},
+  {id:'finance',num:'08',label:'Finance',accent:'#dc2626',light:'rgba(220,38,38,0.07)',mesh:'section-mesh-pink',sites:[
+    {n:'PayPal',i:'💳',d:'The world\'s most-used digital wallet.',t:'Payments',u:'https://paypal.com'},
+    {n:'Coinbase',i:'₿',d:'Buy, sell and store cryptocurrency safely.',t:'Crypto',u:'https://coinbase.com'},
+    {n:'Robinhood',i:'📈',d:'Commission-free stock and crypto trading.',t:'Investing',u:'https://robinhood.com'},
+    {n:'Wise',i:'🌏',d:'International transfers at the real exchange rate.',t:'Transfers',u:'https://wise.com'},
+    {n:'Stripe',i:'⚡',d:'The internet\'s payment infrastructure.',t:'Developer',u:'https://stripe.com'},
+    {n:'Mint',i:'💰',d:'Track spending, budgets and credit score.',t:'Budgeting',u:'https://mint.intuit.com'},
+  ]},
+  {id:'travel',num:'09',label:'Travel',accent:'#d97706',light:'rgba(217,119,6,0.08)',mesh:'section-mesh-blue',sites:[
+    {n:'Airbnb',i:'🏠',d:'Unique stays and local experiences worldwide.',t:'Stays',u:'https://airbnb.com'},
+    {n:'Booking.com',i:'🏨',d:'28M+ listings with flexible cancellation.',t:'Hotels',u:'https://booking.com'},
+    {n:'Google Flights',i:'✈️',d:'Find cheap flights with price tracking.',t:'Flights',u:'https://google.com/flights'},
+    {n:'TripAdvisor',i:'⭐',d:'880M+ reviews from real travellers.',t:'Reviews',u:'https://tripadvisor.com'},
+    {n:'Skyscanner',i:'🔭',d:'Compare flights, hotels and car hire.',t:'Compare',u:'https://skyscanner.com'},
+    {n:'Google Maps',i:'🗺️',d:'Navigate anywhere with real-time traffic.',t:'Navigation',u:'https://maps.google.com'},
+  ]},
+  {id:'gaming',num:'10',label:'Gaming',accent:'#16a34a',light:'rgba(22,163,74,0.07)',mesh:'section-mesh-green',sites:[
+    {n:'Steam',i:'🎮',d:'The world\'s largest PC game library.',t:'PC Gaming',u:'https://store.steampowered.com'},
+    {n:'Xbox',i:'🟢',d:'Game Pass, cloud gaming and exclusive titles.',t:'Console',u:'https://xbox.com'},
+    {n:'Epic Games',i:'🔵',d:'Fortnite, free game giveaways and Unreal Engine.',t:'Store',u:'https://epicgames.com'},
+    {n:'Chess.com',i:'♟️',d:'Play online against millions or train with grandmasters.',t:'Strategy',u:'https://chess.com'},
+    {n:'Itch.io',i:'🕹️',d:'Indie marketplace for experimental and creative games.',t:'Indie',u:'https://itch.io'},
+    {n:'Miniclip',i:'🎯',d:'Classic browser games — pool, football and more.',t:'Browser',u:'https://miniclip.com'},
+  ]},
+  {id:'ai',num:'11',label:'AI',accent:'#2563eb',light:'rgba(37,99,235,0.08)',mesh:'section-mesh-violet',sites:[
+    {n:'Claude',i:'🤖',d:'Anthropic\'s most thoughtful AI assistant. Analysis, writing, coding.',t:"Editor's Pick",featured:true,u:'https://claude.ai'},
+    {n:'ChatGPT',i:'💬',d:'OpenAI\'s flagship conversational AI.',t:'Chatbot',u:'https://chat.openai.com'},
+    {n:'Midjourney',i:'🖼️',d:'Generate stunning images from text prompts.',t:'Image Gen',u:'https://midjourney.com'},
+    {n:'Gemini',i:'♊',d:'Google\'s multimodal AI assistant.',t:'Multimodal',u:'https://gemini.google.com'},
+    {n:'Runway',i:'🎬',d:'AI video generation for creators.',t:'Video AI',u:'https://runway.ml'},
+    {n:'ElevenLabs',i:'🎙️',d:'Ultra-realistic voice synthesis.',t:'Voice AI',u:'https://elevenlabs.io'},
+    {n:'Microsoft Copilot',i:'🪄',d:'AI integrated across Microsoft 365.',t:'Productivity',u:'https://copilot.microsoft.com'},
+  ]},
+  {id:'health',num:'12',label:'Health',accent:'#16a34a',light:'rgba(22,163,74,0.07)',mesh:'section-mesh-green',sites:[
+    {n:'WebMD',i:'🩺',d:'Trusted health information, symptoms and drugs.',t:'Medical',u:'https://webmd.com'},
+    {n:'Headspace',i:'🧘',d:'Guided meditation and mindfulness training.',t:'Mindfulness',u:'https://headspace.com'},
+    {n:'Strava',i:'🏃',d:'Track runs, rides and connect with athletes.',t:'Fitness',u:'https://strava.com'},
+    {n:'MyFitnessPal',i:'🥗',d:'Calorie tracking with 14M+ food database.',t:'Nutrition',u:'https://myfitnesspal.com'},
+    {n:'Calm',i:'🌙',d:'Sleep stories, breathing and relaxation.',t:'Sleep',u:'https://calm.com'},
+    {n:'Practo',i:'👨‍⚕️',d:'Find doctors and consult healthcare professionals.',t:'Doctors',u:'https://practo.com'},
+  ]},
+];
+
+/* ════════════════════════════
+   CURSOR
+════════════════════════════ */
+function Cursor(){
+  const dot=useRef(null), ring=useRef(null);
+  const pos=useRef({x:0,y:0}), rpos=useRef({x:0,y:0}), raf=useRef(null);
+  useEffect(()=>{
+    const move=e=>{pos.current={x:e.clientX,y:e.clientY}};
+    const down=()=>{if(dot.current)dot.current.style.transform='translate(-50%,-50%) scale(0.5)'};
+    const up=()=>{if(dot.current)dot.current.style.transform='translate(-50%,-50%) scale(1)'};
+    document.addEventListener('mousemove',move);
+    document.addEventListener('mousedown',down);
+    document.addEventListener('mouseup',up);
+    const links=document.querySelectorAll('a,button,.x-card');
+    links.forEach(el=>{
+      el.addEventListener('mouseenter',()=>{if(ring.current){ring.current.style.width='52px';ring.current.style.height='52px';ring.current.style.borderColor='rgba(37,99,235,0.6)';ring.current.style.borderRadius='12px'}});
+      el.addEventListener('mouseleave',()=>{if(ring.current){ring.current.style.width='36px';ring.current.style.height='36px';ring.current.style.borderColor='rgba(37,99,235,0.4)';ring.current.style.borderRadius='50%'}});
+    });
+    const tick=()=>{
+      rpos.current.x+=(pos.current.x-rpos.current.x)*0.12;
+      rpos.current.y+=(pos.current.y-rpos.current.y)*0.12;
+      if(dot.current){dot.current.style.left=pos.current.x+'px';dot.current.style.top=pos.current.y+'px';}
+      if(ring.current){ring.current.style.left=rpos.current.x+'px';ring.current.style.top=rpos.current.y+'px';}
+      raf.current=requestAnimationFrame(tick);
+    };
+    tick();
+    return()=>{
+      document.removeEventListener('mousemove',move);
+      document.removeEventListener('mousedown',down);
+      document.removeEventListener('mouseup',up);
+      if(raf.current)cancelAnimationFrame(raf.current);
+    };
+  },[]);
+  return null; // managed via DOM refs for perf
+}
+
+/* ════════════════════════════
+   NAV
+════════════════════════════ */
+function Nav({q,setQ,scrolled}){
+  const [mobileOpen,setMobileOpen]=useState(false);
+  return(
+    <nav style={{
+      position:'fixed',top:0,left:0,right:0,zIndex:500,
+      height:54,display:'flex',alignItems:'center',justifyContent:'space-between',
+      padding:'0 32px',
+      background:scrolled?'rgba(250,250,250,0.88)':'rgba(255,255,255,0.72)',
+      backdropFilter:'blur(40px) saturate(200%)',
+      WebkitBackdropFilter:'blur(40px) saturate(200%)',
+      borderBottom:scrolled?'1px solid rgba(0,0,0,0.08)':'1px solid transparent',
+      transition:'all 0.4s cubic-bezier(0.22,1,0.36,1)',
+    }}>
+      {/* Logo */}
+      <div style={{display:'flex',alignItems:'center',gap:8,flexShrink:0}}>
+        <div style={{
+          width:30,height:30,borderRadius:9,
+          background:'linear-gradient(135deg,#2563eb,#7c3aed)',
+          display:'flex',alignItems:'center',justifyContent:'center',
+          fontSize:14,color:'white',fontWeight:700,fontFamily:'DM Serif Display,serif',
+          boxShadow:'0 2px 8px rgba(37,99,235,0.35)',
+        }}>P</div>
+        <span style={{fontSize:17,fontWeight:700,letterSpacing:'-0.04em',fontFamily:'DM Sans,sans-serif'}}>
+          <span style={{color:'#09090b'}}>Play</span><span style={{color:'#2563eb'}}>way</span>
+        </span>
+      </div>
+
+      {/* Center links */}
+      <div className="nav-desktop" style={{display:'flex',alignItems:'center',gap:2,
+        background:'rgba(0,0,0,0.03)',borderRadius:12,padding:'3px 4px',border:'1px solid rgba(0,0,0,0.06)'}}>
+        {CATS.slice(0,9).map(c=>(
+          <a key={c.id} href={`#${c.id}`} className="nav-pill-link" style={{fontSize:12.5}}>{c.label}</a>
+        ))}
+        <span style={{color:'rgba(0,0,0,0.2)',padding:'0 4px',fontSize:12}}>···</span>
+      </div>
+
+      {/* Search */}
+      <div style={{position:'relative',width:196,flexShrink:0}}>
+        <svg style={{position:'absolute',left:12,top:'50%',transform:'translateY(-50%)',opacity:0.35,pointerEvents:'none'}} width="13" height="13" viewBox="0 0 13 13" fill="none">
+          <circle cx="5.5" cy="5.5" r="4.5" stroke="#09090b" strokeWidth="1.3"/>
+          <path d="M9 9l3 3" stroke="#09090b" strokeWidth="1.3" strokeLinecap="round"/>
+        </svg>
+        <input className="input-field" style={{paddingLeft:36,paddingTop:8,paddingBottom:8,fontSize:13,borderRadius:10}}
+          placeholder="Search everything…" value={q} onChange={e=>setQ(e.target.value.toLowerCase())}/>
+        {q&&<button onClick={()=>setQ('')} style={{position:'absolute',right:10,top:'50%',transform:'translateY(-50%)',background:'rgba(0,0,0,0.09)',border:'none',borderRadius:'50%',width:17,height:17,fontSize:9,cursor:'pointer',color:'#666',display:'flex',alignItems:'center',justifyContent:'center'}}>✕</button>}
+      </div>
+    </nav>
+  );
+}
+
+/* ════════════════════════════
+   HERO
+════════════════════════════ */
+function Hero(){
+  const containerRef=useRef(null);
+  const [mousePos,setMousePos]=useState({x:0.5,y:0.5});
+
+  useEffect(()=>{
+    const onMove=e=>{
+      setMousePos({x:e.clientX/window.innerWidth,y:e.clientY/window.innerHeight});
+    };
+    window.addEventListener('mousemove',onMove,{passive:true});
+    return()=>window.removeEventListener('mousemove',onMove);
+  },[]);
+
+  const parallaxStyle=(strength=30)=>({
+    transform:`translate(${(mousePos.x-0.5)*-strength}px, ${(mousePos.y-0.5)*-strength}px)`,
+    transition:'transform 0.8s cubic-bezier(0.22,1,0.36,1)',
+  });
+
+  return(
+    <section ref={containerRef} className="hero-mesh" style={{
+      minHeight:'100vh',display:'flex',flexDirection:'column',
+      alignItems:'center',justifyContent:'center',
+      textAlign:'center',padding:'100px 24px 80px',
+      position:'relative',overflow:'hidden',
+    }}>
+      {/* Parallax orbs */}
+      <div style={{position:'absolute',top:'5%',left:'8%',width:480,height:480,
+        borderRadius:'50%',background:'radial-gradient(circle,rgba(37,99,235,0.08),transparent 70%)',
+        filter:'blur(50px)',pointerEvents:'none',...parallaxStyle(20)}}/>
+      <div style={{position:'absolute',bottom:'5%',right:'6%',width:380,height:380,
+        borderRadius:'50%',background:'radial-gradient(circle,rgba(124,58,237,0.07),transparent 70%)',
+        filter:'blur(42px)',pointerEvents:'none',...parallaxStyle(-18)}}/>
+      <div style={{position:'absolute',top:'35%',right:'10%',width:260,height:260,
+        borderRadius:'50%',background:'radial-gradient(circle,rgba(79,70,229,0.06),transparent 70%)',
+        filter:'blur(34px)',pointerEvents:'none',...parallaxStyle(25)}}/>
+
+      {/* Floating glass cards — decorative */}
+      <div className="floating" style={{position:'absolute',left:'4%',top:'22%',zIndex:2,...parallaxStyle(12)}}>
+        <div className="glass-card shadow-md2 rounded-2xl p-4 w-48 text-left">
+          <div style={{fontSize:20,marginBottom:8}}>🔍</div>
+          <div style={{fontSize:13,fontWeight:600,color:'#09090b',marginBottom:2}}>Google</div>
+          <div style={{fontSize:11,color:'#71717a'}}>Search engine</div>
+          <div style={{marginTop:8,fontSize:10,background:'rgba(37,99,235,0.09)',color:'#2563eb',padding:'2px 8px',borderRadius:980,display:'inline-block',fontWeight:600,letterSpacing:'0.05em',textTransform:'uppercase'}}>Universal</div>
+        </div>
+      </div>
+      <div className="floating2" style={{position:'absolute',right:'4%',top:'28%',zIndex:2,...parallaxStyle(-10)}}>
+        <div className="glass-card shadow-md2 rounded-2xl p-4 w-48 text-left">
+          <div style={{fontSize:20,marginBottom:8}}>🤖</div>
+          <div style={{fontSize:13,fontWeight:600,color:'#09090b',marginBottom:2}}>Claude</div>
+          <div style={{fontSize:11,color:'#71717a'}}>AI Assistant</div>
+          <div style={{marginTop:8,fontSize:10,background:'rgba(37,99,235,0.09)',color:'#2563eb',padding:'2px 8px',borderRadius:980,display:'inline-block',fontWeight:600,letterSpacing:'0.05em',textTransform:'uppercase'}}>Editor's Pick</div>
+        </div>
+      </div>
+      <div className="floating3" style={{position:'absolute',left:'6%',bottom:'18%',zIndex:2,...parallaxStyle(15)}}>
+        <div className="glass-card shadow-md2 rounded-2xl p-4 w-44 text-left">
+          <div style={{fontSize:20,marginBottom:8}}>🎵</div>
+          <div style={{fontSize:13,fontWeight:600,color:'#09090b',marginBottom:2}}>Spotify</div>
+          <div style={{fontSize:11,color:'#71717a'}}>Music streaming</div>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div style={{position:'relative',zIndex:10,maxWidth:780}}>
+        {/* Badge */}
+        <div style={{display:'inline-flex',alignItems:'center',gap:8,
+          background:'rgba(255,255,255,0.85)',backdropFilter:'blur(20px)',
+          border:'1px solid rgba(0,0,0,0.08)',borderRadius:980,
+          padding:'7px 18px',marginBottom:32,
+          boxShadow:'0 2px 12px rgba(0,0,0,0.06)',
+          fontSize:12.5,fontWeight:500,color:'rgba(60,60,67,0.75)',
+          animation:'none',
+        }}>
+          <div className="live-dot"></div>
+          The internet, curated
+        </div>
+
+        {/* Headline */}
+        <h1 className="hero-display" style={{marginBottom:28}}>
+          Every website.<br/>
+          <em>One place.</em>
+        </h1>
+
+        {/* Subhead */}
+        <p style={{fontSize:'clamp(17px,2vw,21px)',fontWeight:300,color:'#52525b',
+          maxWidth:520,margin:'0 auto 44px',lineHeight:1.58,letterSpacing:'-0.01em'}}>
+          Playway curates the very best of the web — search, social, news, shopping, entertainment and beyond.
+        </p>
+
+        {/* CTAs */}
+        <div style={{display:'flex',gap:12,justifyContent:'center',flexWrap:'wrap',marginBottom:64}}>
+          <a href="#search" className="btn btn-primary" style={{fontSize:15,padding:'13px 30px'}}>Start exploring →</a>
+          <a href="#ai" className="btn btn-secondary" style={{fontSize:15,padding:'13px 30px'}}>Discover AI tools</a>
+        </div>
+
+        {/* Meta */}
+        <div className="glass shadow-xs" style={{display:'inline-flex',alignItems:'center',borderRadius:980,overflow:'hidden'}}>
+          {[{dot:'#2563eb',txt:'12 categories'},{dot:'#7c3aed',txt:'80+ curated sites'},{dot:'#22c55e',txt:'Always updated'}].map((m,i)=>(
+            <div key={i} style={{display:'flex',alignItems:'center',gap:8,padding:'11px 22px',
+              borderRight:i<2?'1px solid rgba(0,0,0,0.08)':'none',
+              fontSize:12.5,fontWeight:500,color:'rgba(60,60,67,0.75)'}}>
+              <div style={{width:7,height:7,borderRadius:'50%',background:m.dot,flexShrink:0}}></div>
+              {m.txt}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Scroll indicator */}
+      <div style={{position:'absolute',bottom:40,display:'flex',flexDirection:'column',alignItems:'center',gap:8}}>
+        <div style={{width:1,height:38,background:'linear-gradient(180deg,rgba(0,0,0,0.15),transparent)',animation:'floatY 2s ease-in-out infinite'}}></div>
+        <span style={{fontSize:9,fontWeight:700,letterSpacing:'0.14em',textTransform:'uppercase',color:'rgba(0,0,0,0.28)'}}>Scroll</span>
+      </div>
+    </section>
+  );
+}
+
+/* ════════════════════════════
+   MARQUEE
+════════════════════════════ */
+function Marquee(){
+  const items=['Search Engines','Social Media','Streaming','Online Shopping','Breaking News','AI Tools','Gaming','Finance','Travel','Education','Health & Wellness','Productivity'];
+  return(
+    <div className="mq-wrap" style={{overflow:'hidden',borderTop:'1px solid rgba(0,0,0,0.07)',borderBottom:'1px solid rgba(0,0,0,0.07)',background:'rgba(255,255,255,0.6)',backdropFilter:'blur(16px)',padding:'15px 0',position:'relative'}}>
+      <div style={{position:'absolute',left:0,top:0,bottom:0,width:140,background:'linear-gradient(90deg,#fafafa,transparent)',zIndex:2,pointerEvents:'none'}}/>
+      <div style={{position:'absolute',right:0,top:0,bottom:0,width:140,background:'linear-gradient(-90deg,#fafafa,transparent)',zIndex:2,pointerEvents:'none'}}/>
+      <div className="mq-track">
+        {[...items,...items].map((item,i)=>(
+          <span key={i} style={{display:'inline-flex',alignItems:'center',gap:12,padding:'0 28px',
+            fontSize:11,fontWeight:600,letterSpacing:'0.09em',textTransform:'uppercase',color:'rgba(60,60,67,0.4)',whiteSpace:'nowrap'}}>
+            <span style={{fontSize:6,color:'#2563eb',opacity:0.5}}>◆</span>
+            {item}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ════════════════════════════
+   STATS
+════════════════════════════ */
+function Stats(){
+  const ref=useRef();
+  const [vals,setVals]=useState([0,0,0,0]);
+  const targets=[12,80,4,5];
+  useEffect(()=>{
+    const obs=new IntersectionObserver(([e])=>{
+      if(!e.isIntersecting)return;
+      const dur=1400,start=Date.now();
+      const tick=()=>{
+        const p=Math.min((Date.now()-start)/dur,1);
+        const ease=1-Math.pow(1-p,3);
+        setVals(targets.map(t=>Math.round(ease*t)));
+        if(p<1)requestAnimationFrame(tick);
+      };tick();obs.disconnect();
+    });
+    if(ref.current)obs.observe(ref.current);
+    return()=>obs.disconnect();
+  },[]);
+
+  const STATS=[
+    {n:`${vals[0]}`,l:'Categories',c:'#2563eb',desc:'Spanning every major web vertical'},
+    {n:`${vals[1]}+`,l:'Curated Sites',c:'#7c3aed',desc:'Hand-picked for quality'},
+    {n:`${vals[2]}M+`,l:'Monthly users',c:'#ec4899',desc:'Trust Playway daily'},
+    {n:`${vals[3]}★`,l:'Avg. rating',c:'#d97706',desc:'Rated by real users'},
+  ];
+
+  return(
+    <div ref={ref} className="stats-grid rv" style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',
+      borderTop:'1px solid rgba(0,0,0,0.07)',borderBottom:'1px solid rgba(0,0,0,0.07)',
+      background:'rgba(255,255,255,0.65)',backdropFilter:'blur(20px)'}}>
+      {STATS.map((s,i)=>(
+        <div key={i} style={{padding:'52px 28px',textAlign:'center',borderRight:i<3?'1px solid rgba(0,0,0,0.07)':'none',position:'relative',overflow:'hidden',transition:'background 0.3s'}}
+          onMouseEnter={e=>e.currentTarget.style.background=`${s.c}07`}
+          onMouseLeave={e=>e.currentTarget.style.background='transparent'}>
+          <div className="stat-num" style={{color:s.c,marginBottom:8}}>{s.n}</div>
+          <div style={{fontSize:11,fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',color:'rgba(60,60,67,0.5)',marginBottom:6}}>{s.l}</div>
+          <div style={{fontSize:12,fontWeight:300,color:'rgba(60,60,67,0.45)'}}>{s.desc}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* ════════════════════════════
+   SITE CARD
+════════════════════════════ */
+function SiteCard({site,accent,idx}){
+  const [hov,setHov]=useState(false);
+  return(
+    <a href={site.u} target="_blank" rel="noopener"
+      className="glass-card x-card rv rounded-2xl"
+      style={{
+        display:'flex',flexDirection:'column',gap:0,padding:'22px',
+        borderColor:hov?`${accent}25`:'rgba(255,255,255,0.95)',
+        animationDelay:`${idx*35}ms`,
+        transitionDelay:`${idx*20}ms`,
+        boxShadow:hov?`0 12px 40px rgba(0,0,0,0.10),0 0 0 1px ${accent}18`:'0 2px 12px rgba(0,0,0,0.06),0 1px 3px rgba(0,0,0,0.04)',
+      }}
+      onMouseEnter={()=>setHov(true)}
+      onMouseLeave={()=>setHov(false)}
+    >
+      <div style={{display:'flex',alignItems:'flex-start',justifyContent:'space-between',marginBottom:14}}>
+        <div className="icon-box" style={{
+          background:hov?`${accent}12`:'rgba(255,255,255,0.95)',
+          transform:hov?'scale(1.1) rotate(-3deg)':'scale(1) rotate(0)',
+          transition:'all 0.35s cubic-bezier(0.34,1.56,0.64,1)',
+        }}>{site.i}</div>
+        <span style={{fontSize:9,fontWeight:700,letterSpacing:'0.06em',textTransform:'uppercase',
+          padding:'3px 10px',borderRadius:980,
+          background:hov?`${accent}12`:'rgba(0,0,0,0.05)',
+          color:hov?accent:'rgba(60,60,67,0.45)',
+          border:`1px solid ${hov?`${accent}25`:'rgba(0,0,0,0.07)'}`,
+          transition:'all 0.25s',flexShrink:0,
+        }}>{site.t}</span>
+      </div>
+      <div style={{fontSize:15,fontWeight:600,letterSpacing:'-0.02em',color:'#09090b',marginBottom:6}}>{site.n}</div>
+      <div style={{fontSize:12.5,fontWeight:300,color:'#71717a',lineHeight:1.6,flexGrow:1,marginBottom:14}}>{site.d}</div>
+      <div style={{display:'flex',alignItems:'center',gap:4,fontSize:12,fontWeight:500,color:accent,
+        opacity:hov?1:0,transform:hov?'translateX(0)':'translateX(-8px)',
+        transition:'all 0.25s cubic-bezier(0.22,1,0.36,1)',
+      }}>Open <span style={{fontSize:14}}>↗</span></div>
+    </a>
+  );
+}
+
+/* ════════════════════════════
+   FEATURED (AI Editor's Pick)
+════════════════════════════ */
+function FeaturedAI(){
+  const [hov,setHov]=useState(false);
+  return(
+    <a href="https://claude.ai" target="_blank" rel="noopener"
+      className="x-card rv"
+      style={{display:'block',marginBottom:12,borderRadius:20,overflow:'hidden'}}
+      onMouseEnter={()=>setHov(true)}
+      onMouseLeave={()=>setHov(false)}
+    >
+      <div className="feat-bg" style={{
+        padding:'40px 44px',position:'relative',overflow:'hidden',borderRadius:20,
+        backdropFilter:'blur(32px)',
+        background:hov
+          ?'linear-gradient(135deg,rgba(37,99,235,0.11),rgba(79,70,229,0.12),rgba(124,58,237,0.09))'
+          :'linear-gradient(135deg,rgba(37,99,235,0.07),rgba(79,70,229,0.08),rgba(124,58,237,0.06))',
+        boxShadow:hov?'0 16px 60px rgba(37,99,235,0.14),0 4px 16px rgba(0,0,0,0.06)':'0 4px 24px rgba(0,0,0,0.06)',
+        transition:'all 0.4s cubic-bezier(0.22,1,0.36,1)',
+      }}>
+        {/* Orbs */}
+        <div style={{position:'absolute',top:-80,right:-80,width:280,height:280,borderRadius:'50%',background:'radial-gradient(circle,rgba(37,99,235,0.13),transparent 70%)',pointerEvents:'none',transition:'transform 0.5s var(--ease)',transform:hov?'scale(1.12)':'scale(1)'}}/>
+        <div style={{position:'absolute',bottom:-60,left:'30%',width:200,height:200,borderRadius:'50%',background:'radial-gradient(circle,rgba(124,58,237,0.09),transparent 70%)',pointerEvents:'none'}}/>
+        <div style={{position:'relative',zIndex:1,display:'flex',alignItems:'center',justifyContent:'space-between',gap:24,flexWrap:'wrap'}}>
+          <div style={{display:'flex',alignItems:'center',gap:18}}>
+            <div style={{width:60,height:60,borderRadius:18,background:'rgba(255,255,255,0.92)',
+              display:'flex',alignItems:'center',justifyContent:'center',fontSize:28,
+              boxShadow:'0 4px 20px rgba(37,99,235,0.2)',
+              transform:hov?'scale(1.06) rotate(-2deg)':'scale(1)',transition:'all 0.35s cubic-bezier(0.34,1.56,0.64,1)'
+            }}>🤖</div>
+            <div>
+              <div style={{fontSize:10,fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',color:'#2563eb',marginBottom:6}}>⭐ Editor's Pick</div>
+              <div style={{fontSize:24,fontWeight:700,letterSpacing:'-0.03em',color:'#09090b',marginBottom:6,fontFamily:'DM Serif Display,serif'}}>Claude by Anthropic</div>
+              <div style={{fontSize:14,fontWeight:300,color:'rgba(60,60,67,0.7)',maxWidth:420,lineHeight:1.55}}>
+                The most thoughtful AI assistant. Deep analysis, nuanced writing, coding help and genuine conversation — built with safety at its core.
+              </div>
+            </div>
+          </div>
+          <div className="btn btn-primary" style={{fontSize:14,flexShrink:0,transform:hov?'translateY(-2px)':'none',transition:'transform 0.3s'}}>
+            Open Claude →
+          </div>
+        </div>
+      </div>
+    </a>
+  );
+}
+
+/* ════════════════════════════
+   SECTION
+════════════════════════════ */
+function Section({cat,q}){
+  const ref=useRef();
+  const isAlt=parseInt(cat.num)%2===0;
+  const filtered=useMemo(()=>{
+    if(!q)return cat.sites;
+    const lq=q.toLowerCase();
+    return cat.sites.filter(s=>s.n.toLowerCase().includes(lq)||s.d.toLowerCase().includes(lq)||s.t.toLowerCase().includes(lq));
+  },[q,cat]);
+
+  if(q&&filtered.length===0)return null;
+
+  const headings={
+    'Search':'Find anything.',
+    'Social':'Connect the world.',
+    'News':'Stay informed.',
+    'Shopping':'Buy anything.',
+    'Stream':'Watch. Listen.',
+    'Learn':'Grow your mind.',
+    'Tools':'Work smarter.',
+    'Finance':'Manage money.',
+    'Travel':'Explore the world.',
+    'Gaming':'Play.',
+    'AI':'The future is here.',
+    'Health':'Live well.',
+  };
+
+  return(
+    <section id={cat.id} className={isAlt?'section-alt':''} style={{padding:'104px 0',position:'relative',overflow:'hidden'}}>
+      {/* Background orb */}
+      <div style={{position:'absolute',top:'10%',right:isAlt?'auto':'5%',left:isAlt?'5%':'auto',
+        width:400,height:400,borderRadius:'50%',
+        background:`radial-gradient(circle,${cat.accent}06,transparent 65%)`,
+        filter:'blur(60px)',pointerEvents:'none'}}/>
+
+      <div style={{maxWidth:1200,margin:'0 auto',padding:'0 32px'}}>
+        <div className="sec-layout" ref={ref}>
+          {/* Left sidebar */}
+          <div className="sec-sticky">
+            <div className="rv-l" style={{position:'relative'}}>
+              <span className="sec-num">{cat.num}</span>
+              <div style={{fontSize:10,fontWeight:700,letterSpacing:'0.12em',textTransform:'uppercase',
+                color:cat.accent,display:'flex',alignItems:'center',gap:8,marginBottom:12}}>
+                <span style={{display:'inline-block',width:22,height:1,background:cat.accent,opacity:0.7}}></span>
+                {cat.num} — {cat.label}
+              </div>
+              <h2 className="sec-title" style={{marginBottom:16}}>{headings[cat.label]}</h2>
+              <p style={{fontSize:14,fontWeight:300,color:'#71717a',lineHeight:1.65,marginBottom:20}}>
+                {filtered.length} site{filtered.length!==1?'s':''} curated
+              </p>
+              {/* Progress bar */}
+              <div style={{height:2,background:'rgba(0,0,0,0.07)',borderRadius:2,width:80,overflow:'hidden'}}>
+                <div style={{height:'100%',background:cat.accent,borderRadius:2,width:`${(filtered.length/cat.sites.length)*100}%`}}/>
+              </div>
+            </div>
+          </div>
+
+          {/* Right content */}
+          <div>
+            {cat.id==='ai'&&!q&&<FeaturedAI/>}
+            <div className="cards-3">
+              {filtered.filter(s=>!s.featured||q).map((site,i)=>(
+                <SiteCard key={site.n} site={site} accent={cat.accent} idx={i}/>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ════════════════════════════
+   SEPARATOR
+════════════════════════════ */
+function Sep({label}){
+  return(
+    <div style={{display:'flex',alignItems:'center',gap:20,padding:'0 32px',maxWidth:1200,margin:'0 auto'}}>
+      <div className="divider" style={{flex:1}}/>
+      <span style={{fontSize:10,fontWeight:700,letterSpacing:'0.14em',textTransform:'uppercase',
+        color:'rgba(60,60,67,0.3)',whiteSpace:'nowrap'}}>{label}</span>
+      <div className="divider" style={{flex:1}}/>
+    </div>
+  );
+}
+
+/* ════════════════════════════
+   ACCENT BAND
+════════════════════════════ */
+function AccentBand(){
+  return(
+    <div style={{background:'rgba(37,99,235,0.06)',borderTop:'1px solid rgba(37,99,235,0.12)',borderBottom:'1px solid rgba(37,99,235,0.12)',
+      padding:'16px 32px',display:'flex',alignItems:'center',justifyContent:'space-between',backdropFilter:'blur(8px)'}}>
+      <p style={{fontSize:13,fontWeight:500,color:'rgba(60,60,67,0.7)'}}>🎓 The world's best learning platforms — one click away</p>
+      <a href="#learning" className="btn btn-ghost" style={{fontSize:12,padding:'6px 16px'}}>Explore learning →</a>
+    </div>
+  );
+}
+
+/* ════════════════════════════
+   FOOTER
+════════════════════════════ */
+function Footer(){
+  return(
+    <footer className="footer-bg" style={{padding:'80px 32px 48px'}}>
+      <div style={{maxWidth:1200,margin:'0 auto'}}>
+        <div className="footer-grid" style={{display:'grid',gridTemplateColumns:'1.4fr 1fr 1fr 1fr',gap:52,marginBottom:56}}>
+          <div className="footer-brand">
+            <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:16}}>
+              <div style={{width:32,height:32,borderRadius:10,background:'linear-gradient(135deg,#2563eb,#7c3aed)',
+                display:'flex',alignItems:'center',justifyContent:'center',fontSize:15,color:'white',fontWeight:700,
+                fontFamily:'DM Serif Display,serif',boxShadow:'0 2px 8px rgba(37,99,235,0.35)'}}>P</div>
+              <span style={{fontSize:19,fontWeight:700,letterSpacing:'-0.04em'}}>
+                <span style={{color:'#09090b'}}>Play</span><span style={{color:'#2563eb'}}>way</span>
+              </span>
+            </div>
+            <p style={{fontSize:13.5,fontWeight:300,color:'rgba(60,60,67,0.6)',lineHeight:1.72,maxWidth:230,letterSpacing:'-0.005em'}}>
+              Your curated gateway to the entire internet — every category, beautifully organised in one destination.
+            </p>
+          </div>
+          {[
+            {h:'Explore',links:['Search','Social','News','Shopping','Entertainment','Learning']},
+            {h:'More',links:['Tools','Finance','Travel','Gaming','AI','Health']},
+            {h:'Top Picks',links:['Claude AI ✦','Google','YouTube','Spotify','GitHub','Netflix']},
+          ].map((col,i)=>(
+            <div key={i}>
+              <h5 style={{fontSize:9.5,fontWeight:700,letterSpacing:'0.12em',textTransform:'uppercase',color:'rgba(60,60,67,0.35)',marginBottom:18}}>{col.h}</h5>
+              {col.links.map((l,j)=>(
+                <a key={j} href="#" style={{display:'block',fontSize:14,fontWeight:300,color:'rgba(60,60,67,0.62)',
+                  marginBottom:10,letterSpacing:'-0.01em',transition:'color 0.2s'}}
+                  onMouseEnter={e=>e.target.style.color='#09090b'}
+                  onMouseLeave={e=>e.target.style.color='rgba(60,60,67,0.62)'}
+                >{l}</a>
+              ))}
+            </div>
+          ))}
+        </div>
+        <div style={{paddingTop:28,borderTop:'1px solid rgba(0,0,0,0.07)',
+          display:'flex',justifyContent:'space-between',alignItems:'center',flexWrap:'wrap',gap:12}}>
+          <span style={{fontSize:12,fontWeight:300,color:'rgba(60,60,67,0.42)'}}>© 2026 Playway — Everything, everywhere.</span>
+          <div style={{display:'flex',alignItems:'center',gap:7,fontSize:10,fontWeight:600,
+            color:'rgba(60,60,67,0.42)',border:'1px solid rgba(0,0,0,0.08)',borderRadius:980,padding:'5px 13px'}}>
+            <div className="live-dot" style={{width:6,height:6}}></div>All links verified
+          </div>
+          <span style={{fontSize:12,fontWeight:300,color:'rgba(60,60,67,0.42)'}}>Made with ✦ for the curious</span>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+/* ════════════════════════════
+   NO RESULTS
+════════════════════════════ */
+function NoResults({q}){
+  return(
+    <div style={{textAlign:'center',padding:'120px 24px'}}>
+      <div style={{fontSize:52,marginBottom:18}}>🔍</div>
+      <div style={{fontSize:22,fontWeight:600,letterSpacing:'-0.02em',color:'#09090b',marginBottom:10,fontFamily:'DM Serif Display,serif'}}>No results for "{q}"</div>
+      <div style={{fontSize:15,color:'rgba(60,60,67,0.55)'}}>Try a different keyword, site name or category.</div>
+    </div>
+  );
+}
+
+/* ════════════════════════════
+   APP
+════════════════════════════ */
+function App(){
+  const [q,setQ]=useState('');
+  const [scrolled,setScrolled]=useState(false);
+
+  /* progress + nav scroll */
+  useEffect(()=>{
+    const onScroll=()=>{
+      const pg=document.getElementById('pg');
+      const pct=window.scrollY/(document.body.scrollHeight-window.innerHeight)*100;
+      if(pg)pg.style.width=pct+'%';
+      setScrolled(window.scrollY>24);
+    };
+    window.addEventListener('scroll',onScroll,{passive:true});
+    return()=>window.removeEventListener('scroll',onScroll);
+  },[]);
+
+  /* intersection reveal */
+  useEffect(()=>{
+    const obs=new IntersectionObserver(entries=>{
+      entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target);}});
+    },{threshold:0.07});
+    const update=()=>document.querySelectorAll('.rv,.rv-l').forEach(el=>obs.observe(el));
+    update();
+    const mo=new MutationObserver(update);
+    mo.observe(document.body,{childList:true,subtree:true});
+    return()=>{obs.disconnect();mo.disconnect()};
+  },[]);
+
+  /* cursor events after mount */
+  useEffect(()=>{
+    const dot=document.getElementById('cursor'),ring=document.getElementById('cursor-ring');
+    if(!dot||!ring)return;
+    let cx=0,cy=0,rx=0,ry=0;
+    const move=e=>{cx=e.clientX;cy=e.clientY;dot.style.left=cx+'px';dot.style.top=cy+'px'};
+    document.addEventListener('mousemove',move,{passive:true});
+    const tick=()=>{
+      rx+=(cx-rx)*.11;ry+=(cy-ry)*.11;
+      ring.style.left=rx+'px';ring.style.top=ry+'px';
+      requestAnimationFrame(tick);
+    };tick();
+    const over=()=>{ring.style.width='52px';ring.style.height='52px';ring.style.borderRadius='12px';ring.style.borderColor='rgba(37,99,235,0.55)'};
+    const out=()=>{ring.style.width='36px';ring.style.height='36px';ring.style.borderRadius='50%';ring.style.borderColor='rgba(37,99,235,0.4)'};
+    document.querySelectorAll('a,button,.x-card').forEach(el=>{el.addEventListener('mouseenter',over);el.addEventListener('mouseleave',out)});
+    return()=>document.removeEventListener('mousemove',move);
+  },[]);
+
+  const filtered=useMemo(()=>{
+    if(!q)return CATS;
+    const lq=q.toLowerCase();
+    return CATS.filter(c=>c.label.toLowerCase().includes(lq)||c.sites.some(s=>s.n.toLowerCase().includes(lq)||s.d.toLowerCase().includes(lq)||s.t.toLowerCase().includes(lq)));
+  },[q]);
+
+  const hasResults=filtered.length>0;
+
+  return(
+    <>
+      <Nav q={q} setQ={setQ} scrolled={scrolled}/>
+      <Hero/>
+      <Marquee/>
+      <Stats/>
+
+      {hasResults
+        ? filtered.map((cat,i)=>(
+            <React.Fragment key={cat.id}>
+              {i>0&&<Sep label={cat.label}/>}
+              {i===5&&<AccentBand/>}
+              <Section cat={cat} q={q}/>
+            </React.Fragment>
+          ))
+        : <NoResults q={q}/>
+      }
+
+      <Footer/>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
